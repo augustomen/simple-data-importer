@@ -1,6 +1,6 @@
 import os
 from setuptools import setup, find_packages
-import appname
+import simpledataimporter
 
 
 def read(fname):
@@ -11,15 +11,14 @@ def read(fname):
 
 
 setup(
-    name="appname",
-    version=appname.__version__,
+    name="simpledataimporter",
+    version=simpledataimporter.__version__,
     description=read('DESCRIPTION'),
     long_description=read('README.rst'),
-    keywords='django data import',
+    keywords='data import csv xls xlsx',
     packages=find_packages(),
-    author='augustomen',
+    author='Augusto Men',
     author_email='augustocmen@yahoo.com.br',
     url="",
     include_package_data=True,
-    test_suite='appname.tests.runtests.runtests',
 )
