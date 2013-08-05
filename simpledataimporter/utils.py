@@ -24,7 +24,7 @@ def get_any_attribute(obj, attribute_names):
     for alias in attribute_names:
         try:
             value = obj[alias]
-        except (TypeError, KeyError):
+        except (TypeError, KeyError, IndexError):
             try:
                 value = getattr(obj, alias)
             except AttributeError:
