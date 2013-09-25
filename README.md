@@ -85,11 +85,11 @@ Create your own:
             return False
 
 
-Create an instance of MyImporter with any iterable (such as the ones in
-dataimporter2.readers):
+Create an instance of `MyImporter` with any iterable (such as the ones in
+`simpledataimporter.readers`):
 
     mycsv = SlugCSVReader('/path/to/file.csv')
     myimporter = MyImporter(mycsv)
     myimporter.run()  # run!
 
-For each valid row, the function save() will be called.
+For each valid row, the function `save()` will be called.
