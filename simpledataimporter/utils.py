@@ -6,12 +6,12 @@ import unicodedata
 def slugify(value):
     """
     Normalizes string, converts to lowercase, removes non-alpha characters,
-    and converts spaces to hyphens.
+    and converts spaces to underscores (without duplicates).
     Taken from django.template.defaultfilters
     """
     value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
     value = unicode(re.sub('[^\w\s-]', '', value).strip().lower())
-    return re.sub('[-\s]+', '_', value)
+    return re.sub('[^a-z0-9]+', '_', value)
 
 
 def get_any_attribute(obj, attribute_names):

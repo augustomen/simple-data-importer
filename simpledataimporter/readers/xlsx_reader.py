@@ -7,7 +7,7 @@ from simpledataimporter.utils import slugify
 class XLSXReader(object):
     """ Iterable reader for use with BaseImporter.
         Uses openpyxl iterable reader instead of xlrd.
-        Works only with Excel 2007- files (*.xlsx).
+        Works with Excel 2007- files (*.xlsx).
 
         filename can be a string or a file object.
         To change the current worksheet, use:
