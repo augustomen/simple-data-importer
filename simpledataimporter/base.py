@@ -113,7 +113,7 @@ class BaseImporter(object):
                     self.save(row_number, row_values)
                     self.rows_saved += 1
                 except Exception as exc:
-                    if not self.exception_handler(row_number, exc):
+                    if not self.exception_handler(row_number, row, exc):
                         break
                 finally:
                     self.rows_processed += 1
