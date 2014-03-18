@@ -101,8 +101,7 @@ class BaseImporter(object):
 
                         if value is None and options.get('required'):
                             raise AttributeError(
-                                "'%s' has no attributes %s" %
-                                (type(value), ", ".join(field_names)))
+                                "Source has no attribute %s" % field_names[0])
 
                         value = options['coerce'](value)
                         value = options['_clean'](
