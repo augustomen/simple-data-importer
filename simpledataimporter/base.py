@@ -4,7 +4,11 @@ from simpledataimporter.utils import get_any_attribute
 
 
 class RequiredFieldMissing(Exception):
-    pass
+
+    def __init__(self, field_names):
+        super(RequiredFieldMissing, self).__init__(
+            "Source has no attribute %s" % field_names[0])
+        self.field_names = field_names
 
 
 class BaseImporter(object):
@@ -110,8 +114,7 @@ class BaseImporter(object):
                                 row, field_names)
 
                         if value is None and options.get('required'):
-                            raise RequiredFieldMissing(
-                                "Source has no attribute %s" % field_names[0])
+                            raise RequiredFieldMissing(field_names)
 
                         value = options['coerce'](value)
                         value = options['_clean'](
