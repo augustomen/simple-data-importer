@@ -3,6 +3,10 @@
 from simpledataimporter.utils import get_any_attribute
 
 
+class RequiredFieldMissing(Exception):
+    pass
+
+
 class BaseImporter(object):
     """ The base class for all importers.
 
@@ -21,7 +25,7 @@ class BaseImporter(object):
 
             'required': False,
             # default: False. If True and the value is not provided, will
-            # raise an AttributeError exception
+            # raise an RequiredFieldMissing exception
 
             'coerce': int,
             # a single-parameter callable applied to the value
@@ -34,9 +38,16 @@ class BaseImporter(object):
     def __init__(self, source):
         """ source must be an iterable """
         self._source = source
+        self._reset()
+
+    def _reset(self):
+        """ Don't call directly. """
         self.current_row = None
+        self.current_row_number = 0
         self.rows_saved = 0
         self.rows_processed = 0
+        self.exception_count = 0
+        self.aborted = False
 
     def _fake_clean(self, row_number, row_values, value):
         return value
@@ -53,9 +64,7 @@ class BaseImporter(object):
         pass
 
     def run(self):
-        self.rows_saved = 0
-        self.rows_processed = 0
-
+        self._reset()
         self.before_import()
         try:
             for field_index, options in enumerate(self.fields):
@@ -82,6 +91,7 @@ class BaseImporter(object):
                         self, 'clean_%s' % field_names[0], self._fake_clean)
 
             for row_number, row in enumerate(self._source):
+                self.current_row_number = row_number
                 self.current_row = row
                 try:
                     """ row is an object, dict or list with field names
@@ -100,7 +110,7 @@ class BaseImporter(object):
                                 row, field_names)
 
                         if value is None and options.get('required'):
-                            raise AttributeError(
+                            raise RequiredFieldMissing(
                                 "Source has no attribute %s" % field_names[0])
 
                         value = options['coerce'](value)
@@ -112,7 +122,9 @@ class BaseImporter(object):
                     self.save(row_number, row_values)
                     self.rows_saved += 1
                 except Exception as exc:
+                    self.exception_count += 1
                     if not self.exception_handler(row_number, row, exc):
+                        self.aborted = True
                         break
                 finally:
                     self.rows_processed += 1
