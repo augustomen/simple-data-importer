@@ -1,8 +1,27 @@
 # coding: utf-8
+import sys
 import xlrd
 import datetime
 
 from simpledataimporter.utils import slugify
+
+
+def excel_str(value):
+    """ Meant to be used as `coerce` option. Will transform numbers to a
+        string. According to xlrd documentation, all strings are presented
+        as unicode. """
+    if value is None:
+        return None
+
+    if isinstance(value, float) and not (value % 1):
+        # Excel will store ints as floats, so check for a decimal part and
+        # cast to int.
+        return str(int(value))
+
+    if sys.version_info[0] <= 2:
+        return unicode(value)
+    else:
+        return str(value)
 
 
 class ExcelReader(object):
