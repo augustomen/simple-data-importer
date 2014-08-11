@@ -31,7 +31,7 @@ class XLSXReader(object):
         for i, row in enumerate(self.worksheet.iter_rows()):
             if i == 0:
                 continue
-            yield dict(zip(fields, [cell.internal_value for cell in row]))
+            yield dict(zip(fields, [cell.value for cell in row]))
 
     @property
     def fieldnames(self):
@@ -39,7 +39,7 @@ class XLSXReader(object):
             row = self.worksheet.iter_rows().next()
             self._fieldnames = []
             for cell in row:
-                self._fieldnames.append(cell.internal_value)
+                self._fieldnames.append(cell.value)
         return self._fieldnames
 
     @property
