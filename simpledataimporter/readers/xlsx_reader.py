@@ -39,7 +39,7 @@ class XLSXReader(object):
             row = self.worksheet.iter_rows().next()
             self._fieldnames = []
             for cell in row:
-                self._fieldnames.append(cell.value)
+                self._fieldnames.append(cell.value or '')
         return self._fieldnames
 
     @property
